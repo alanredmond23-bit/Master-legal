@@ -1,0 +1,1799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shannon Research Product - Deployment Guide V2</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --navy: #1a365d;
+            --navy-light: #2c5282;
+            --gold: #d69e2e;
+            --gold-light: #f6e05e;
+            --green: #38a169;
+            --red: #c53030;
+            --purple: #805ad5;
+            --gray-50: #f7fafc;
+            --gray-100: #edf2f7;
+            --gray-200: #e2e8f0;
+            --gray-300: #cbd5e0;
+            --gray-600: #718096;
+            --gray-800: #2d3748;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: var(--gray-800);
+            background: white;
+            font-size: 11pt;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* Cover Page */
+        .cover-page {
+            min-height: 100vh;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px;
+            page-break-after: always;
+        }
+
+        .cover-page h1 {
+            font-size: 42pt;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+
+        .cover-page .subtitle {
+            font-size: 18pt;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .cover-badge {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 12px 30px;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 14pt;
+            margin-bottom: 60px;
+            letter-spacing: 2px;
+        }
+
+        .cover-meta {
+            margin-top: 60px;
+            font-size: 10pt;
+            opacity: 0.7;
+        }
+
+        .cover-meta p {
+            margin: 5px 0;
+        }
+
+        .confidential-banner {
+            background: var(--red);
+            color: white;
+            padding: 8px 20px;
+            font-size: 9pt;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-top: 40px;
+        }
+
+        /* Table of Contents */
+        .toc-page {
+            padding: 60px;
+            page-break-after: always;
+        }
+
+        .toc-page h2 {
+            font-size: 24pt;
+            color: var(--navy);
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        .toc-section {
+            margin-bottom: 25px;
+        }
+
+        .toc-section-title {
+            font-size: 11pt;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toc-section-title .day-badge {
+            background: var(--gold);
+            color: var(--navy);
+            padding: 2px 10px;
+            border-radius: 2px;
+            font-size: 9pt;
+            font-weight: 600;
+        }
+
+        .toc-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0 10px 25px;
+            border-bottom: 1px solid var(--gray-200);
+            font-size: 10pt;
+            transition: all 0.15s ease;
+        }
+
+        .toc-item:hover {
+            background: var(--gray-50);
+            padding-left: 30px;
+            color: var(--navy);
+        }
+
+        .toc-item a {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        /* Main Content */
+        .content {
+            padding: 50px 60px;
+        }
+
+        /* Section Headers */
+        .step-header {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
+            color: white;
+            padding: 30px 40px;
+            margin: 40px -60px 30px -60px;
+            page-break-before: always;
+        }
+
+        .step-header:first-of-type {
+            page-break-before: avoid;
+        }
+
+        .step-number {
+            font-size: 11pt;
+            font-weight: 600;
+            color: var(--gold);
+            letter-spacing: 3px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .step-title {
+            font-size: 22pt;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .step-meta {
+            display: flex;
+            gap: 25px;
+            font-size: 10pt;
+            opacity: 0.85;
+            margin-top: 8px;
+        }
+
+        .step-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .meta-label {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--gold);
+        }
+
+        /* Sub-sections */
+        h3 {
+            font-size: 14pt;
+            color: var(--navy);
+            margin: 25px 0 15px 0;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--gray-200);
+        }
+
+        h4 {
+            font-size: 12pt;
+            color: var(--navy-light);
+            margin: 20px 0 10px 0;
+        }
+
+        /* Info Boxes - Minimalist */
+        .info-box {
+            background: var(--gray-50);
+            border-left: 3px solid var(--navy);
+            padding: 20px 25px;
+            margin: 20px 0;
+        }
+
+        .info-box.warning {
+            background: #fffbeb;
+            border-left-color: var(--gold);
+        }
+
+        .info-box.success {
+            background: #f0fdf4;
+            border-left-color: var(--green);
+        }
+
+        .info-box.critical {
+            background: #fef2f2;
+            border-left-color: var(--red);
+        }
+
+        .info-box-title {
+            font-weight: 600;
+            font-size: 11pt;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .info-box-title::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: currentColor;
+            border-radius: 1px;
+        }
+
+        .info-box.critical .info-box-title { color: var(--red); }
+        .info-box.success .info-box-title { color: var(--green); }
+        .info-box.warning .info-box-title { color: var(--gold); }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 10pt;
+        }
+
+        th {
+            background: var(--navy);
+            color: white;
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        td {
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        tr:nth-child(even) {
+            background: var(--gray-50);
+        }
+
+        /* Sprint Schedule Table */
+        .sprint-table th {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .sprint-table td:first-child {
+            font-weight: 600;
+            color: var(--navy);
+        }
+
+        /* Code Blocks */
+        pre, code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9pt;
+        }
+
+        pre {
+            background: var(--gray-800);
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        code {
+            background: var(--gray-100);
+            padding: 2px 6px;
+            border-radius: 2px;
+            color: var(--navy);
+        }
+
+        pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        /* Folder Structure */
+        .folder-structure {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            color: #e2e8f0;
+            padding: 25px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10pt;
+            line-height: 1.8;
+        }
+
+        .folder-structure .folder {
+            color: var(--gold-light);
+        }
+
+        /* Checklist - Minimalist */
+        .checklist {
+            list-style: none;
+            padding: 0;
+        }
+
+        .checklist li {
+            padding: 12px 0 12px 30px;
+            position: relative;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .checklist li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--navy);
+            border-radius: 2px;
+        }
+
+        /* Workflow Diagram - Minimalist */
+        .workflow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--gray-50);
+            padding: 40px;
+            margin: 25px 0;
+            border: 1px solid var(--gray-200);
+        }
+
+        .workflow-step {
+            text-align: center;
+            flex: 1;
+        }
+
+        .workflow-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--navy);
+            color: white;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 11pt;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .workflow-icon.gold {
+            background: var(--gold);
+            color: var(--navy);
+        }
+
+        .workflow-icon.green {
+            background: var(--green);
+        }
+
+        .workflow-label {
+            font-weight: 600;
+            font-size: 12pt;
+            color: var(--navy);
+        }
+
+        .workflow-time {
+            font-size: 9pt;
+            color: var(--gray-600);
+            margin-top: 4px;
+        }
+
+        .workflow-arrow {
+            font-size: 20px;
+            color: var(--gray-300);
+            font-weight: 300;
+        }
+
+        /* Screenshot Placeholder - Minimalist */
+        .screenshot-placeholder {
+            background: var(--gray-100);
+            border: 1px dashed var(--gray-300);
+            padding: 50px;
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .screenshot-placeholder .label {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 5px;
+        }
+
+        .screenshot-placeholder .hint {
+            font-size: 9pt;
+            color: var(--gray-600);
+        }
+
+        /* Motion Type Cards - Minimalist */
+        .motion-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .motion-card {
+            background: white;
+            border: 1px solid var(--gray-200);
+            padding: 16px;
+            border-left: 3px solid var(--navy);
+        }
+
+        .motion-card.high-priority {
+            border-left-color: var(--red);
+        }
+
+        .motion-card.medium-priority {
+            border-left-color: var(--gold);
+        }
+
+        .motion-code {
+            font-size: 9pt;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .motion-name {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 10pt;
+            margin-bottom: 4px;
+        }
+
+        .motion-cite {
+            font-size: 8pt;
+            color: var(--gray-600);
+            font-style: italic;
+        }
+
+        /* Glossary - Minimalist */
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .glossary-term {
+            background: var(--gray-50);
+            padding: 16px 20px;
+            border-left: 3px solid var(--purple);
+        }
+
+        .glossary-term strong {
+            color: var(--navy);
+            font-size: 11pt;
+        }
+
+        .glossary-term .definition {
+            margin-top: 5px;
+            font-size: 10pt;
+        }
+
+        .glossary-term .citation {
+            margin-top: 5px;
+            font-size: 9pt;
+            color: var(--gray-600);
+            font-style: italic;
+        }
+
+        /* Summary Matrix */
+        .summary-matrix {
+            page-break-before: always;
+        }
+
+        .matrix-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .matrix-section {
+            border: 1px solid var(--gray-200);
+            padding: 20px;
+        }
+
+        .matrix-section h4 {
+            font-size: 11pt;
+            color: var(--navy);
+            margin: 0 0 15px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .matrix-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .matrix-item:last-child {
+            border-bottom: none;
+        }
+
+        .matrix-check {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--gray-300);
+            border-radius: 2px;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .matrix-item span {
+            font-size: 10pt;
+        }
+
+        .quick-ref {
+            background: var(--navy);
+            color: white;
+            padding: 30px;
+            margin: 30px 0;
+        }
+
+        .quick-ref h4 {
+            color: var(--gold);
+            margin: 0 0 20px 0;
+            font-size: 14pt;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 10px;
+        }
+
+        .quick-ref-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .quick-ref-item {
+            font-size: 10pt;
+        }
+
+        .quick-ref-item strong {
+            display: block;
+            color: var(--gold);
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        /* Stats Grid - Minimalist */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin: 25px 0;
+        }
+
+        .stat-card {
+            background: var(--navy);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 32pt;
+            font-weight: 700;
+            color: var(--gold);
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 9pt;
+            opacity: 0.85;
+            margin-top: 8px;
+            line-height: 1.3;
+        }
+
+        /* Tab Colors Visual */
+        .tab-color-strip {
+            display: flex;
+            gap: 2px;
+            margin: 20px 0;
+        }
+
+        .tab-color {
+            flex: 1;
+            height: 6px;
+        }
+
+        /* Print Styles */
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+
+            .cover-page {
+                min-height: auto;
+                padding: 100px 60px;
+            }
+
+            .step-header {
+                margin: 30px -40px 20px -40px;
+                padding: 20px 30px;
+            }
+
+            .content {
+                padding: 30px 40px;
+            }
+
+            .no-print {
+                display: none;
+            }
+        }
+
+        @page {
+            margin: 0.75in;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 15px 0 15px 25px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 8px 16px;
+            background: var(--gray-100);
+            color: var(--navy);
+            font-size: 9pt;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            transition: all 0.15s ease;
+        }
+
+        .back-to-top:hover {
+            background: var(--navy);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<!-- COVER PAGE -->
+<div class="cover-page" id="top">
+    <div class="cover-badge">5-DAY SPRINT</div>
+    <h1>Shannon Research Product</h1>
+    <p class="subtitle">EDPA Litigation Intelligence Deployment Guide</p>
+
+    <div style="margin: 40px 0; opacity: 0.8;">
+        <p style="font-size: 14pt;">Build a tendency + predictability engine for</p>
+        <p style="font-size: 14pt;">EDPA criminal and bankruptcy cases</p>
+    </div>
+
+    <div class="cover-meta">
+        <p><strong>Case:</strong> US v. Redmond, EDPA 24-376 (27 counts)</p>
+        <p><strong>Bankruptcy:</strong> Judge Mayer</p>
+        <p><strong>Date:</strong> January 2026</p>
+        <p><strong>Version:</strong> 2.0 Final</p>
+    </div>
+
+    <div class="confidential-banner">
+        PRIVILEGED & CONFIDENTIAL — ATTORNEY WORK PRODUCT
+    </div>
+</div>
+
+<!-- TABLE OF CONTENTS -->
+<div class="toc-page" id="toc">
+    <h2>Table of Contents</h2>
+
+    <div class="toc-section">
+        <div class="toc-section-title">Executive Summary</div>
+        <div class="toc-item"><a href="#exec-summary"><span>Mission & Deliverables</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#sprint-schedule"><span>5-Day Sprint Schedule</span><span>→</span></a></div>
+    </div>
+
+    <div class="toc-section">
+        <div class="toc-section-title"><span class="day-badge">DAY 1</span> Setup & Judges</div>
+        <div class="toc-item"><a href="#step-1"><span>STEP 1: Setup</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#step-2"><span>STEP 2: Judge Schemel Deep Dive</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#step-3"><span>STEP 3: Judge Mayer Analysis</span><span>→</span></a></div>
+    </div>
+
+    <div class="toc-section">
+        <div class="toc-section-title"><span class="day-badge">DAY 2</span> Prosecutors</div>
+        <div class="toc-item"><a href="#step-4"><span>STEP 4: Agent Crawley Profile</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#step-5"><span>STEP 5: AUSA Dalke Profile</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#step-6"><span>STEP 6: DOJ EDPA House Style</span><span>→</span></a></div>
+    </div>
+
+    <div class="toc-section">
+        <div class="toc-section-title"><span class="day-badge">DAY 3</span> National & Library</div>
+        <div class="toc-item"><a href="#step-7"><span>STEP 7: DOJ Nationwide Trends</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#step-8"><span>STEP 8: Motion Doctrine Library</span><span>→</span></a></div>
+    </div>
+
+    <div class="toc-section">
+        <div class="toc-section-title"><span class="day-badge">DAY 4</span> Dockets & Prediction</div>
+        <div class="toc-item"><a href="#step-9"><span>STEP 9: Docket Mastery</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#step-10"><span>STEP 10: Prediction Engine</span><span>→</span></a></div>
+    </div>
+
+    <div class="toc-section">
+        <div class="toc-section-title"><span class="day-badge">DAY 5</span> Final Report</div>
+        <div class="toc-item"><a href="#step-11"><span>STEP 11: Final Report & QC</span><span>→</span></a></div>
+    </div>
+
+    <div class="toc-section">
+        <div class="toc-section-title">Reference Materials</div>
+        <div class="toc-item"><a href="#workbook"><span>Workbook Specification</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#glossary"><span>Glossary: Key Legal Terms</span><span>→</span></a></div>
+        <div class="toc-item"><a href="#quick-ref-matrix"><span>Quick Reference Matrix</span><span>→</span></a></div>
+    </div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="content">
+    <div class="step-header" id="exec-summary" style="page-break-before: avoid;">
+        <div class="step-number">EXECUTIVE SUMMARY</div>
+        <div class="step-title">Mission & Deliverables</div>
+    </div>
+
+    <h3>Mission</h3>
+    <div class="info-box success">
+        <div class="info-box-title">Primary Objective</div>
+        Build a <strong>tendency + predictability engine</strong> for EDPA criminal and bankruptcy cases in <strong>5 working days</strong>.
+    </div>
+
+    <h3>Hard Deliverables</h3>
+    <table>
+        <tr>
+            <th>#</th>
+            <th>Deliverable</th>
+            <th>Format</th>
+            <th>Day Due</th>
+        </tr>
+        <tr>
+            <td>1</td>
+            <td>Master dataset</td>
+            <td>XLSX (14 tabs)</td>
+            <td>Day 4</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>Final report</td>
+            <td>25-60 pages</td>
+            <td>Day 5</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Citable paragraphs</td>
+            <td>Library (50-150)</td>
+            <td>Day 3</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>ABCD prediction trees</td>
+            <td>By motion type</td>
+            <td>Day 4</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>Docket + attachments</td>
+            <td>100% indexed</td>
+            <td>Day 4</td>
+        </tr>
+    </table>
+
+    <h3 id="sprint-schedule">5-Day Sprint Schedule</h3>
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number">1</div>
+            <div class="stat-label">Judges<br>Schemel + Mayer</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">2</div>
+            <div class="stat-label">Prosecutors<br>Crawley + Dalke</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">3</div>
+            <div class="stat-label">Library<br>Nationwide + Doctrine</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">4</div>
+            <div class="stat-label">Integration<br>Dockets + ABCD</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number">5</div>
+            <div class="stat-label">Delivery<br>Report + QC</div>
+        </div>
+    </div>
+
+    <table class="sprint-table">
+        <tr>
+            <th>Day</th>
+            <th>Focus</th>
+            <th>Output</th>
+        </tr>
+        <tr>
+            <td>DAY 1</td>
+            <td>Schemel + Mayer</td>
+            <td>Case indexes + 20 exemplars + 15 citable quotes</td>
+        </tr>
+        <tr>
+            <td>DAY 2</td>
+            <td>Crawley + Dalke + DOJ EDPA</td>
+            <td>Profiles + patterns + 15 citable quotes</td>
+        </tr>
+        <tr>
+            <td>DAY 3</td>
+            <td>Nationwide + Motion Library</td>
+            <td>Trends + doctrine library + 20 citable quotes</td>
+        </tr>
+        <tr>
+            <td>DAY 4</td>
+            <td>Dockets + ABCD trees</td>
+            <td>100% dockets indexed + prediction engine</td>
+        </tr>
+        <tr>
+            <td>DAY 5</td>
+            <td>Final report + QC</td>
+            <td>25-60 page report + verified workbook</td>
+        </tr>
+    </table>
+
+    <div class="info-box">
+        <div class="info-box-title">Total Time</div>
+        <strong>38-40 hours over 5 days</strong> (approximately 8 hours per day)
+    </div>
+
+    <h3>Daily Workflow Pattern</h3>
+    <div class="workflow-diagram">
+        <div class="workflow-step">
+            <div class="workflow-icon">G</div>
+            <div class="workflow-label">GRAB</div>
+            <div class="workflow-time">Morning · 3 hrs</div>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+            <div class="workflow-icon gold">A</div>
+            <div class="workflow-label">ANALYZE</div>
+            <div class="workflow-time">Midday · 3 hrs</div>
+        </div>
+        <div class="workflow-arrow">→</div>
+        <div class="workflow-step">
+            <div class="workflow-icon green">R</div>
+            <div class="workflow-label">RECORD</div>
+            <div class="workflow-time">Afternoon · 2 hrs</div>
+        </div>
+    </div>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP ONE -->
+    <div class="step-header" id="step-1">
+        <div class="step-number">STEP ONE</div>
+        <div class="step-title">Setup</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 1 Morning</span>
+            <span><span class="meta-label"></span>1 hour</span>
+        </div>
+    </div>
+
+    <h3>1.1 Create Westlaw Folder Hierarchy</h3>
+    <p>In Westlaw Edge, create this folder structure:</p>
+
+    <div class="folder-structure">
+        <span class="folder">EDPA_24-376_Research/</span><br>
+        ├── <span class="folder">01_Judges/</span><br>
+        │   ├── Schemel_Cases/<br>
+        │   └── Mayer_Cases/<br>
+        ├── <span class="folder">02_Prosecutors/</span><br>
+        │   ├── Dalke_Cases/<br>
+        │   └── Crawley_AOPCs/<br>
+        ├── <span class="folder">03_DOJ_Patterns/</span><br>
+        │   ├── EDPA_Oppositions/<br>
+        │   └── Nationwide_Sample/<br>
+        ├── <span class="folder">04_Motion_Library/</span><br>
+        │   ├── Brady_Giglio/<br>
+        │   ├── Franks/<br>
+        │   ├── Selective_Vindictive/<br>
+        │   ├── Daubert/<br>
+        │   └── MTD/<br>
+        └── <span class="folder">05_Our_Dockets/</span><br>
+        &nbsp;&nbsp;&nbsp;&nbsp;├── Criminal_24-376/<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;└── Bankruptcy/
+    </div>
+
+    <div class="screenshot-placeholder">
+        <div class="label">Screenshot: Westlaw Folder Structure</div>
+        <div class="hint">Insert screenshot of your Westlaw folder hierarchy here</div>
+    </div>
+
+    <h3>1.2 Configure CoCounsel Database</h3>
+    <ol>
+        <li>Open CoCounsel → "Search a Database" skill</li>
+        <li>Create new database: <code>EDPA_24376_Research_[YYYYMMDD]</code></li>
+        <li>Set up tags using motion codes M01-M12 (see Motion Types below)</li>
+    </ol>
+
+    <h3>1.3 Set Up Workbook</h3>
+    <ol>
+        <li>Open <code>EDPA_Intel_Workbook_V2.xlsx</code></li>
+        <li>Verify all 14 tabs present</li>
+        <li>Enable auto-filter on all column headers</li>
+        <li>Set freeze panes on row 1</li>
+    </ol>
+
+    <h3>1.4 Confirm Subscriptions</h3>
+    <ul class="checklist">
+        <li>Westlaw Edge with Litigation Analytics</li>
+        <li>CoCounsel 2.0 access</li>
+        <li>PACER account active</li>
+    </ul>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP TWO -->
+    <div class="step-header" id="step-2">
+        <div class="step-number">STEP TWO</div>
+        <div class="step-title">Judge Schemel Deep Dive</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 1</span>
+            <span><span class="meta-label"></span>4 hours</span>
+            <span><span class="meta-label"></span>60 cases + 15 exemplars</span>
+        </div>
+    </div>
+
+    <h3>2.1 Pull Judge Analytics Dashboard</h3>
+    <ol>
+        <li>Navigate: <strong>Westlaw → Litigation Analytics → Judges</strong></li>
+        <li>Search: <code>Schemel</code> + Court = EDPA + Date = last 10 years</li>
+        <li>Export/screenshot:
+            <ul>
+                <li>Motion grant rates by type</li>
+                <li>Average time to rule</li>
+                <li>Case-type distribution</li>
+            </ul>
+        </li>
+        <li>Save to: <code>01_Judges/Schemel_Cases/Analytics_Screenshot.png</code></li>
+    </ol>
+
+    <div class="screenshot-placeholder">
+        <div class="label">Screenshot: Judge Schemel Analytics Dashboard</div>
+        <div class="hint">Insert Westlaw Litigation Analytics screenshot here</div>
+    </div>
+
+    <h3>2.2 Build Case Index (Target: 60 cases)</h3>
+    <ol>
+        <li>Navigate: <strong>Westlaw → Dockets → Advanced Search</strong></li>
+        <li>Filters:
+            <ul>
+                <li>Court = EDPA</li>
+                <li>Judge = Schemel</li>
+                <li>Date = last 10 years</li>
+                <li>Nature = Criminal</li>
+            </ul>
+        </li>
+        <li>Export case list to Tab <code>02_Schemel_CaseIndex</code></li>
+        <li>Fill all columns: Case#, Caption, Filed, Closed, Nature, Judge, Key Motions, Outcome</li>
+    </ol>
+
+    <h3>2.3 Extract 15 Exemplars</h3>
+    <p>For each relevant case with key motions:</p>
+    <ol>
+        <li>Download: Motion + Opposition + Reply + Order</li>
+        <li>Save to folder: <code>01_Judges/Schemel_Cases/{case_number}/</code></li>
+        <li>Use naming: <code>YYYY-MM-DD_Doc#_DocType_Party_ShortTitle.pdf</code></li>
+        <li>Log in Tab <code>03_Schemel_Exemplars</code></li>
+    </ol>
+
+    <h3>2.4 Harvest 10 Citable Paragraphs</h3>
+    <p>Use CoCounsel with this prompt:</p>
+    <pre>Extract 1-3 paragraphs verbatim that:
+- A judge could adopt into an order
+- Support our motion position
+- Criticize DOJ conduct or reasoning
+
+Include exact page/paragraph pinpoint citation.</pre>
+    <p>Log in Tab <code>11_Most_Citable_Paragraphs</code></p>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP THREE -->
+    <div class="step-header" id="step-3">
+        <div class="step-number">STEP THREE</div>
+        <div class="step-title">Judge Mayer Analysis</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 1</span>
+            <span><span class="meta-label"></span>3 hours</span>
+            <span><span class="meta-label"></span>30 cases + 10 exemplars</span>
+        </div>
+    </div>
+
+    <h3>3.1 Pull Bankruptcy Case List</h3>
+    <ol>
+        <li>Navigate: <strong>Westlaw → Dockets → Advanced Search</strong></li>
+        <li>Filters:
+            <ul>
+                <li>Court = EDPA Bankruptcy</li>
+                <li>Judge = Mayer</li>
+                <li>Date = last 10 years</li>
+            </ul>
+        </li>
+        <li>If Litigation Analytics unavailable, use docket-driven method</li>
+    </ol>
+
+    <h3>3.2 Build Case Index (Target: 30 cases)</h3>
+    <ol>
+        <li>Export to Tab <code>04_Mayer_CaseIndex</code></li>
+        <li>Focus on: adversary proceedings, sanctions, SBA/UST matters</li>
+    </ol>
+
+    <h3>3.3 Extract 10 Exemplars</h3>
+    <ol>
+        <li>Download motion packets for key rulings</li>
+        <li>Save to: <code>01_Judges/Mayer_Cases/{case_number}/</code></li>
+        <li>Log in Tab <code>05_Mayer_Exemplars</code></li>
+    </ol>
+
+    <h3>3.4 Harvest 5 Citable Paragraphs</h3>
+    <p>Same CoCounsel prompt as Step 2.4. Log in Tab <code>11_Most_Citable_Paragraphs</code></p>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP FOUR -->
+    <div class="step-header" id="step-4">
+        <div class="step-number">STEP FOUR</div>
+        <div class="step-title">Agent Crawley Profile</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 2</span>
+            <span><span class="meta-label"></span>3 hours</span>
+            <span><span class="meta-label"></span>Franks vulnerabilities</span>
+        </div>
+    </div>
+
+    <h3>4.1 Search for All Crawley Affidavits</h3>
+    <ol>
+        <li>Navigate: <strong>Westlaw → Search within documents</strong></li>
+        <li>Query: <code>"Crawley" AND "Affidavit" AND "probable cause"</code></li>
+        <li>Filter: EDPA, last 10 years</li>
+    </ol>
+
+    <h3>4.2 Index AOPC Patterns</h3>
+    <p>For each affidavit found:</p>
+    <ol>
+        <li>Note: Sources cited, methodology, language patterns</li>
+        <li>Log in Tab <code>09_Crawley_Profile</code></li>
+        <li>Flag any: omissions, cherry-picking, selection bias</li>
+    </ol>
+
+    <h3>4.3 Flag Franks Vulnerabilities</h3>
+    <div class="info-box critical">
+        <div class="info-box-title">Look For</div>
+        <ul>
+            <li>Context omissions</li>
+            <li>Timing manipulations</li>
+            <li>Alternative explanation ignored</li>
+            <li>Regulator findings mischaracterized</li>
+        </ul>
+    </div>
+
+    <h3>4.4 Extract 10 Citable Paragraphs</h3>
+    <p>CoCounsel prompt:</p>
+    <pre>Identify any language discussing:
+- Agent methodology criticism
+- Omissions in affidavits
+- Selection bias in evidence presentation
+
+Quote verbatim with pinpoints.</pre>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP FIVE -->
+    <div class="step-header" id="step-5">
+        <div class="step-number">STEP FIVE</div>
+        <div class="step-title">AUSA Dalke Profile</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 2</span>
+            <span><span class="meta-label"></span>2 hours</span>
+            <span><span class="meta-label"></span>15 cases + patterns</span>
+        </div>
+    </div>
+
+    <h3>5.1 Pull Dalke Case History</h3>
+    <ol>
+        <li>Search dockets by attorney name: <code>Dalke</code></li>
+        <li>Export cases to Tab <code>08_Dalke_Profile</code></li>
+        <li>Target: 15 cases minimum</li>
+    </ol>
+
+    <h3>5.2 Map Argument Templates</h3>
+    <p>For each case:</p>
+    <ol>
+        <li>Pull motions/oppositions Dalke authored</li>
+        <li>Note: Opening arguments, favorite citations, language patterns</li>
+        <li>Identify: What he concedes, what he fights hardest</li>
+    </ol>
+
+    <h3>5.3 Extract 5 Citable Paragraphs</h3>
+    <p>Focus on: Dalke losses, judge criticisms, successful defense counters</p>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP SIX -->
+    <div class="step-header" id="step-6">
+        <div class="step-number">STEP SIX</div>
+        <div class="step-title">DOJ EDPA House Style</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 2</span>
+            <span><span class="meta-label"></span>3 hours</span>
+            <span><span class="meta-label"></span>30 opposition samples</span>
+        </div>
+    </div>
+
+    <h3>6.1 Sample 30 Oppositions by Motion Type</h3>
+    <table>
+        <tr>
+            <th>Motion Type</th>
+            <th>Target Count</th>
+        </tr>
+        <tr>
+            <td>Continuance opposition</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td>Brady/Giglio opposition</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td>Suppression/Franks opposition</td>
+            <td>8</td>
+        </tr>
+        <tr>
+            <td>Severance opposition</td>
+            <td>6</td>
+        </tr>
+    </table>
+
+    <h3>6.2 Document Boilerplate Patterns</h3>
+    <p>Create template library:</p>
+    <ol>
+        <li>Standard opening paragraphs</li>
+        <li>Favorite authorities cited</li>
+        <li>Typical concession language</li>
+        <li>Fallback arguments</li>
+    </ol>
+
+    <h3>6.3 Build Counter-Argument Matrix</h3>
+    <p>Log in Tab <code>06_EDPA_DOJ_CaseIndex</code></p>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP SEVEN -->
+    <div class="step-header" id="step-7">
+        <div class="step-number">STEP SEVEN</div>
+        <div class="step-title">DOJ Nationwide Trends</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 3</span>
+            <span><span class="meta-label"></span>4 hours</span>
+            <span><span class="meta-label"></span>40 matters sampled</span>
+        </div>
+    </div>
+
+    <h3>7.1 Sample 40 Matters Across Districts</h3>
+    <ol>
+        <li>Search: Brady/Giglio/Franks motions nationwide</li>
+        <li>Filter: Last 5 years, favorable defense outcomes</li>
+        <li>Target districts: SDNY, CDCA, NDGA, EDVA</li>
+    </ol>
+
+    <h3>7.2 Identify National Patterns</h3>
+    <p>Compare to EDPA norms:</p>
+    <ul>
+        <li>Grant rates</li>
+        <li>Hearing frequency</li>
+        <li>Discovery timelines</li>
+        <li>Sanctions frequency</li>
+    </ul>
+
+    <h3>7.3 Log to Tab <code>07_DOJ_Nationwide_Sample</code></h3>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP EIGHT -->
+    <div class="step-header" id="step-8">
+        <div class="step-number">STEP EIGHT</div>
+        <div class="step-title">Motion Doctrine Library</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 3</span>
+            <span><span class="meta-label"></span>4 hours</span>
+            <span><span class="meta-label"></span>12 motion types mapped</span>
+        </div>
+    </div>
+
+    <h3>8.1 Build Authority List for All 12 Motion Types</h3>
+
+    <div class="motion-grid">
+        <div class="motion-card high-priority">
+            <div class="motion-code">M01</div>
+            <div class="motion-name">Brady/Giglio Motion to Compel</div>
+            <div class="motion-cite">Brady v. Maryland, 373 U.S. 83</div>
+        </div>
+        <div class="motion-card high-priority">
+            <div class="motion-code">M02</div>
+            <div class="motion-name">Franks Motion + Suppression</div>
+            <div class="motion-cite">Franks v. Delaware, 438 U.S. 154</div>
+        </div>
+        <div class="motion-card medium-priority">
+            <div class="motion-code">M03</div>
+            <div class="motion-name">Vindictive/Selective Prosecution</div>
+            <div class="motion-cite">United States v. Armstrong, 517 U.S. 456</div>
+        </div>
+        <div class="motion-card high-priority">
+            <div class="motion-code">M04</div>
+            <div class="motion-name">Improper Prosecutorial Appointment</div>
+            <div class="motion-cite">28 U.S.C. § 541</div>
+        </div>
+        <div class="motion-card medium-priority">
+            <div class="motion-code">M05</div>
+            <div class="motion-name">Compel Discovery Status Order</div>
+            <div class="motion-cite">Fed. R. Crim. P. 16</div>
+        </div>
+        <div class="motion-card">
+            <div class="motion-code">M06</div>
+            <div class="motion-name">Daubert Challenges</div>
+            <div class="motion-cite">Daubert v. Merrell Dow, 509 U.S. 579</div>
+        </div>
+        <div class="motion-card">
+            <div class="motion-code">M07</div>
+            <div class="motion-name">Motions in Limine</div>
+            <div class="motion-cite">Fed. R. Evid. 403</div>
+        </div>
+        <div class="motion-card">
+            <div class="motion-code">M08</div>
+            <div class="motion-name">Continuance Motion</div>
+            <div class="motion-cite">18 U.S.C. § 3161</div>
+        </div>
+        <div class="motion-card high-priority">
+            <div class="motion-code">M09</div>
+            <div class="motion-name">Count-by-Count MTD</div>
+            <div class="motion-cite">Fed. R. Crim. P. 12(b)</div>
+        </div>
+        <div class="motion-card medium-priority">
+            <div class="motion-code">M10</div>
+            <div class="motion-name">Sanctions Motion</div>
+            <div class="motion-cite">Fed. R. Crim. P. 16(d)</div>
+        </div>
+        <div class="motion-card high-priority">
+            <div class="motion-code">M11</div>
+            <div class="motion-name">Napue (False Testimony)</div>
+            <div class="motion-cite">Napue v. Illinois, 360 U.S. 264</div>
+        </div>
+        <div class="motion-card medium-priority">
+            <div class="motion-code">M12</div>
+            <div class="motion-name">Leon Good Faith Exception</div>
+            <div class="motion-cite">United States v. Leon, 468 U.S. 897</div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <div class="info-box-title">Priority Legend</div>
+        <span style="color: var(--red);">■</span> High Priority (4-5) &nbsp;&nbsp;
+        <span style="color: var(--gold);">■</span> Medium Priority (3) &nbsp;&nbsp;
+        <span style="color: var(--navy);">■</span> Standard (1-2)
+    </div>
+
+    <h3>8.2 Extract Key Holdings</h3>
+    <p>For each motion type, identify:</p>
+    <ol>
+        <li>Elements/standard</li>
+        <li>Burden of proof</li>
+        <li>Schemel's interpretation (if any)</li>
+        <li>Best quote for our facts</li>
+    </ol>
+
+    <h3>8.3 Map to Our Case Facts</h3>
+    <p>Create application matrix in Tab <code>10_Motion_Doctrine_Library</code></p>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP NINE -->
+    <div class="step-header" id="step-9">
+        <div class="step-number">STEP NINE</div>
+        <div class="step-title">Docket Mastery</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 4</span>
+            <span><span class="meta-label"></span>5 hours</span>
+            <span><span class="meta-label"></span>100% indexed</span>
+        </div>
+    </div>
+
+    <h3>9.1 Pull 100% Criminal Docket (24-376)</h3>
+    <ol>
+        <li>Login to PACER</li>
+        <li>Pull full docket sheet for case 24-376</li>
+        <li>Download ALL attachments</li>
+        <li>Budget: ~$50-100 (stay under $3/doc cap)</li>
+    </ol>
+
+    <h3>9.2 Pull 100% Bankruptcy Docket</h3>
+    <p>Same process for bankruptcy case</p>
+
+    <h3>9.3 Index All Attachments</h3>
+    <p>Log every document in Tab <code>13_Docket_Attachments_Index</code>:</p>
+    <ul>
+        <li>Docket entry number</li>
+        <li>Date</li>
+        <li>Description</li>
+        <li>File path</li>
+        <li>Relevance tag</li>
+    </ul>
+
+    <h3>9.4 Reconcile Entry Count vs File Count</h3>
+    <div class="info-box critical">
+        <div class="info-box-title">CRITICAL QC</div>
+        Docket entry count <strong>MUST</strong> equal file count. If mismatch, identify missing docs and re-download any gaps.
+    </div>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP TEN -->
+    <div class="step-header" id="step-10">
+        <div class="step-number">STEP TEN</div>
+        <div class="step-title">Prediction Engine</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 4</span>
+            <span><span class="meta-label"></span>3 hours</span>
+            <span><span class="meta-label"></span>12 ABCD trees</span>
+        </div>
+    </div>
+
+    <h3>10.1 Build ABCD Trees by Motion Type</h3>
+    <p>For each of the 12 motion types, create tree:</p>
+    <div class="info-box">
+        <div class="info-box-title">ABCD Tree Structure</div>
+        <strong>A:</strong> DOJ likely move<br>
+        <strong>B:</strong> Defense response<br>
+        <strong>C:</strong> DOJ escalation<br>
+        <strong>D:</strong> Defense counter (hearing request / order language)
+    </div>
+
+    <p>Use CoCounsel prompt:</p>
+    <pre>Based on this exemplar, predict DOJ's likely response to a similar motion.
+Output an ABCD tree:
+A: DOJ likely move
+B: Defense response
+C: DOJ escalation
+D: Defense counter (hearing request / order language)</pre>
+
+    <h3>10.2 Map DOJ Likely Moves</h3>
+    <p>Cross-reference:</p>
+    <ul>
+        <li>Dalke patterns (Tab 08)</li>
+        <li>DOJ EDPA house style (Tab 06)</li>
+        <li>Historical outcomes (Schemel tendencies)</li>
+    </ul>
+
+    <h3>10.3 Script Defense Counters</h3>
+    <p>Log all trees in Tab <code>12_Prediction_Engine</code></p>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- STEP ELEVEN -->
+    <div class="step-header" id="step-11">
+        <div class="step-number">STEP ELEVEN</div>
+        <div class="step-title">Final Report & QC</div>
+        <div class="step-meta">
+            <span><span class="meta-label"></span>Day 5</span>
+            <span><span class="meta-label"></span>6 hours</span>
+            <span><span class="meta-label"></span>25-60 page report</span>
+        </div>
+    </div>
+
+    <h3>11.1 Compile All Sections</h3>
+    <p>Report Structure (25-60 pages):</p>
+    <ol>
+        <li>Executive Summary (2-3 pages)</li>
+        <li>Judge Schemel Profile (5-8 pages)</li>
+        <li>Judge Mayer Profile (4-6 pages)</li>
+        <li>EDPA DOJ House Style (5-8 pages)</li>
+        <li>AUSA Dalke Profile (3-5 pages)</li>
+        <li>Agent Crawley Profile (3-5 pages)</li>
+        <li>DOJ Nationwide Trends (3-5 pages)</li>
+        <li>ABCD Prediction Trees (5-10 pages)</li>
+        <li>Appendix: Most Citable Paragraphs (10-20 pages)</li>
+    </ol>
+
+    <h3>11.2 Verify All Citations</h3>
+    <div class="info-box critical">
+        <div class="info-box-title">CRITICAL</div>
+        Every quote must be verified against source PDF:
+        <ul>
+            <li>Check page numbers</li>
+            <li>Check paragraph numbers</li>
+            <li>Confirm exact wording</li>
+        </ul>
+    </div>
+
+    <h3>11.3 Format Appendices</h3>
+    <p>Organize citable paragraphs by:</p>
+    <ol>
+        <li>Motion type</li>
+        <li>Use case</li>
+        <li>Judge</li>
+    </ol>
+
+    <h3>11.4 Quality Control Checklist</h3>
+    <ul class="checklist">
+        <li>All 14 workbook tabs complete</li>
+        <li>All target counts met or exceeded</li>
+        <li>All quotes verified against source</li>
+        <li>All PDFs organized in folder structure</li>
+        <li>All ABCD trees have source exemplar reference</li>
+        <li>Report formatted consistently</li>
+        <li>Appendix pagination correct</li>
+    </ul>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- REFERENCE: WORKBOOK SPEC -->
+    <div class="step-header" id="workbook">
+        <div class="step-number">REFERENCE</div>
+        <div class="step-title">Workbook Specification</div>
+    </div>
+
+    <h3>Tab Structure</h3>
+    <div class="tab-color-strip">
+        <div class="tab-color" style="background: #404040;"></div>
+        <div class="tab-color" style="background: #1F4E79;"></div>
+        <div class="tab-color" style="background: #00B050;"></div>
+        <div class="tab-color" style="background: #00B050;"></div>
+        <div class="tab-color" style="background: #00B0F0;"></div>
+        <div class="tab-color" style="background: #00B0F0;"></div>
+        <div class="tab-color" style="background: #FFC000;"></div>
+        <div class="tab-color" style="background: #FFC000;"></div>
+        <div class="tab-color" style="background: #C00000;"></div>
+        <div class="tab-color" style="background: #C00000;"></div>
+        <div class="tab-color" style="background: #7030A0;"></div>
+        <div class="tab-color" style="background: #7030A0;"></div>
+        <div class="tab-color" style="background: #002060;"></div>
+        <div class="tab-color" style="background: #000000;"></div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Tab</th>
+            <th>Color</th>
+            <th>Purpose</th>
+        </tr>
+        <tr><td>00_README</td><td style="color: #404040;">■ #404040</td><td>Instructions</td></tr>
+        <tr><td>01_Swimlanes_Plan</td><td style="color: #1F4E79;">■ #1F4E79</td><td>Progress tracking</td></tr>
+        <tr><td>02_Schemel_CaseIndex</td><td style="color: #00B050;">■ #00B050</td><td>Judge case list</td></tr>
+        <tr><td>03_Schemel_Exemplars</td><td style="color: #00B050;">■ #00B050</td><td>Motion packets</td></tr>
+        <tr><td>04_Mayer_CaseIndex</td><td style="color: #00B0F0;">■ #00B0F0</td><td>BK case list</td></tr>
+        <tr><td>05_Mayer_Exemplars</td><td style="color: #00B0F0;">■ #00B0F0</td><td>BK motion packets</td></tr>
+        <tr><td>06_EDPA_DOJ_CaseIndex</td><td style="color: #FFC000;">■ #FFC000</td><td>DOJ house style</td></tr>
+        <tr><td>07_DOJ_Nationwide_Sample</td><td style="color: #FFC000;">■ #FFC000</td><td>National trends</td></tr>
+        <tr><td>08_Dalke_Profile</td><td style="color: #C00000;">■ #C00000</td><td>AUSA patterns</td></tr>
+        <tr><td>09_Crawley_Profile</td><td style="color: #C00000;">■ #C00000</td><td>Agent patterns</td></tr>
+        <tr><td>10_Motion_Doctrine_Library</td><td style="color: #7030A0;">■ #7030A0</td><td>All 12 motion types</td></tr>
+        <tr><td>11_Most_Citable_Paragraphs</td><td style="color: #7030A0;">■ #7030A0</td><td>Quote bank</td></tr>
+        <tr><td>12_Prediction_Engine</td><td style="color: #002060;">■ #002060</td><td>ABCD trees</td></tr>
+        <tr><td>13_Docket_Attachments_Index</td><td style="color: #000000;">■ #000000</td><td>Full docket</td></tr>
+    </table>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- GLOSSARY -->
+    <div class="step-header" id="glossary">
+        <div class="step-number">REFERENCE</div>
+        <div class="step-title">Glossary: Key Legal Terms</div>
+    </div>
+
+    <div class="glossary-grid">
+        <div class="glossary-term">
+            <strong>302</strong>
+            <div class="definition">FBI interview report form</div>
+            <div class="citation">FBI FD-302</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>AOPC</strong>
+            <div class="definition">Application for Order Permitting Capture (wiretap/surveillance warrant)</div>
+            <div class="citation">18 U.S.C. § 2518</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Brady Material</strong>
+            <div class="definition">Evidence favorable to the accused that is material to guilt or punishment</div>
+            <div class="citation">Brady v. Maryland, 373 U.S. 83 (1963)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Daubert Standard</strong>
+            <div class="definition">Federal standard for admissibility of expert testimony based on reliability</div>
+            <div class="citation">Daubert v. Merrell Dow, 509 U.S. 579 (1993)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Franks Hearing</strong>
+            <div class="definition">Evidentiary hearing to challenge false statements in warrant affidavits</div>
+            <div class="citation">Franks v. Delaware, 438 U.S. 154 (1978)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Giglio Material</strong>
+            <div class="definition">Impeachment evidence about government witnesses</div>
+            <div class="citation">Giglio v. United States, 405 U.S. 150 (1972)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Good Faith Exception</strong>
+            <div class="definition">Exception to exclusionary rule when officers rely on facially valid warrant</div>
+            <div class="citation">United States v. Leon, 468 U.S. 897 (1984)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Motion in Limine</strong>
+            <div class="definition">Pre-trial motion to exclude prejudicial evidence</div>
+            <div class="citation">Fed. R. Evid. 403</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>MTD</strong>
+            <div class="definition">Motion to Dismiss</div>
+            <div class="citation">Fed. R. Crim. P. 12(b)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Napue Violation</strong>
+            <div class="definition">Using or failing to correct known false testimony</div>
+            <div class="citation">Napue v. Illinois, 360 U.S. 264 (1959)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Rule 16</strong>
+            <div class="definition">Criminal discovery rule requiring government disclosure</div>
+            <div class="citation">Fed. R. Crim. P. 16</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Selective Prosecution</strong>
+            <div class="definition">Defense claiming defendant singled out based on protected class</div>
+            <div class="citation">United States v. Armstrong, 517 U.S. 456 (1996)</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Speedy Trial Act</strong>
+            <div class="definition">Statutory time limits for federal criminal trials</div>
+            <div class="citation">18 U.S.C. § 3161</div>
+        </div>
+
+        <div class="glossary-term">
+            <strong>Vindictive Prosecution</strong>
+            <div class="definition">Defense claiming prosecution was retaliation for exercising rights</div>
+            <div class="citation">Blackledge v. Perry, 417 U.S. 21 (1974)</div>
+        </div>
+    </div>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- QUICK REFERENCE MATRIX -->
+    <div class="step-header summary-matrix" id="quick-ref-matrix">
+        <div class="step-number">QUICK REFERENCE</div>
+        <div class="step-title">One-Page Summary Matrix</div>
+    </div>
+
+    <div class="quick-ref">
+        <h4>Essential Logins & Tools</h4>
+        <div class="quick-ref-grid">
+            <div class="quick-ref-item">
+                <strong>Westlaw Edge</strong>
+                westlaw.com<br>Litigation Analytics enabled
+            </div>
+            <div class="quick-ref-item">
+                <strong>CoCounsel 2.0</strong>
+                Thomson Reuters AI<br>"Search a Database" skill
+            </div>
+            <div class="quick-ref-item">
+                <strong>PACER</strong>
+                pacer.gov<br>$0.10/page, $3 cap/doc
+            </div>
+        </div>
+    </div>
+
+    <div class="matrix-grid">
+        <div class="matrix-section">
+            <h4>Before Starting (Day 0)</h4>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Westlaw Edge logged in</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>CoCounsel 2.0 accessible</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>PACER account funded</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Workbook template open</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Folder structure created</span></div>
+        </div>
+
+        <div class="matrix-section">
+            <h4>Day 1 Targets</h4>
+            <div class="matrix-item"><div class="matrix-check"></div><span>60 Schemel cases indexed</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>30 Mayer cases indexed</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>15 Schemel exemplars pulled</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>10 Mayer exemplars pulled</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>15 citable paragraphs logged</span></div>
+        </div>
+
+        <div class="matrix-section">
+            <h4>Day 2 Targets</h4>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Crawley affidavits collected</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Franks vulnerabilities flagged</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>15 Dalke cases indexed</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>30 DOJ oppositions sampled</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>15 citable paragraphs logged</span></div>
+        </div>
+
+        <div class="matrix-section">
+            <h4>Day 3 Targets</h4>
+            <div class="matrix-item"><div class="matrix-check"></div><span>40 nationwide matters sampled</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>12 motion types documented</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Authority lists complete</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Key holdings extracted</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>20 citable paragraphs logged</span></div>
+        </div>
+
+        <div class="matrix-section">
+            <h4>Day 4 Targets</h4>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Criminal docket 100% pulled</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Bankruptcy docket 100% pulled</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>All attachments indexed</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Entry count = File count</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>12 ABCD trees built</span></div>
+        </div>
+
+        <div class="matrix-section">
+            <h4>Day 5 Deliverables</h4>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Final report compiled (25-60 pp)</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>All citations verified</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Appendices formatted</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>QC checklist complete</span></div>
+            <div class="matrix-item"><div class="matrix-check"></div><span>Workbook finalized (14 tabs)</span></div>
+        </div>
+    </div>
+
+    <h3>Daily Rhythm</h3>
+    <table>
+        <tr>
+            <th>Time Block</th>
+            <th>Activity</th>
+            <th>Duration</th>
+        </tr>
+        <tr>
+            <td style="font-weight: 600; color: var(--navy);">GRAB</td>
+            <td>Document collection from Westlaw/PACER</td>
+            <td>3 hours</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 600; color: var(--gold);">ANALYZE</td>
+            <td>CoCounsel extraction + coding</td>
+            <td>3 hours</td>
+        </tr>
+        <tr>
+            <td style="font-weight: 600; color: var(--green);">RECORD</td>
+            <td>Update spreadsheet + verify cites</td>
+            <td>2 hours</td>
+        </tr>
+    </table>
+
+    <h3>Key File Paths</h3>
+    <table>
+        <tr>
+            <th>Item</th>
+            <th>Path</th>
+        </tr>
+        <tr>
+            <td>Workbook</td>
+            <td><code>EDPA_Intel_Workbook_V2.xlsx</code></td>
+        </tr>
+        <tr>
+            <td>Westlaw Root</td>
+            <td><code>EDPA_24-376_Research/</code></td>
+        </tr>
+        <tr>
+            <td>CoCounsel DB</td>
+            <td><code>EDPA_24376_Research_[YYYYMMDD]</code></td>
+        </tr>
+        <tr>
+            <td>File Naming</td>
+            <td><code>YYYY-MM-DD_Doc#_DocType_Party_ShortTitle.pdf</code></td>
+        </tr>
+    </table>
+
+    <h3>Emergency Contacts</h3>
+    <table>
+        <tr>
+            <th>Issue</th>
+            <th>Action</th>
+        </tr>
+        <tr>
+            <td>Westlaw down</td>
+            <td>Use PACER docket search as backup</td>
+        </tr>
+        <tr>
+            <td>CoCounsel timeout</td>
+            <td>Break query into smaller chunks</td>
+        </tr>
+        <tr>
+            <td>PACER over budget</td>
+            <td>Prioritize orders + key motions only</td>
+        </tr>
+        <tr>
+            <td>Missing document</td>
+            <td>Check RECAP archive (courtlistener.com)</td>
+        </tr>
+    </table>
+
+    <a href="#toc" class="back-to-top">Back to Contents</a>
+
+    <!-- FOOTER -->
+    <div style="margin-top: 60px; padding-top: 30px; border-top: 2px solid var(--gray-200); text-align: center; color: var(--gray-600); font-size: 9pt;">
+        <p><strong>PRIVILEGED & CONFIDENTIAL — ATTORNEY WORK PRODUCT</strong></p>
+        <p>Case: US v. Redmond, EDPA 24-376</p>
+        <p>Version 2.0 Final | January 2026</p>
+    </div>
+</div>
+
+</body>
+</html>
