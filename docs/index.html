@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shannon Research Portal</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #1a365d 0%, #2d3748 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            padding: 3rem;
+            border-radius: 12px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: #1a365d;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            color: white;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+        h1 {
+            color: #1a365d;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            color: #718096;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+        }
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+        input[type="password"] {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #1a365d;
+        }
+        button {
+            width: 100%;
+            padding: 1rem;
+            background: #1a365d;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #2d4a7c;
+        }
+        .error {
+            color: #c53030;
+            font-size: 0.875rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .footer {
+            margin-top: 2rem;
+            color: #a0aec0;
+            font-size: 0.75rem;
+        }
+        .confidential {
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">SR</div>
+        <h1>Shannon Research Portal</h1>
+        <p class="subtitle">5-Day Strategic Research Sprint</p>
+        <div class="confidential">PRIVILEGED & CONFIDENTIAL</div>
+
+        <form onsubmit="return checkPassword()">
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Enter access password" autocomplete="off">
+            </div>
+            <button type="submit">Access Portal</button>
+        </form>
+
+        <p class="error" id="error">Incorrect password. Please try again.</p>
+
+        <p class="footer">If you need access credentials, contact your case team.</p>
+    </div>
+
+    <script>
+        // Simple hash verification (not cryptographically secure, but deters casual access)
+        // For true security, documents are sent via email
+        function simpleHash(str) {
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash;
+        }
+
+        // Hash of "Shannon2026!" = -1847720940
+        const correctHash = -1847720940;
+
+        function checkPassword() {
+            const password = document.getElementById('password').value;
+            const inputHash = simpleHash(password);
+
+            if (inputHash === correctHash) {
+                // Redirect to the actual document
+                window.location.href = '../Shannon-research/final-plan/Shannon_Research_Product_V2_FINAL.html';
+                return false;
+            } else {
+                document.getElementById('error').style.display = 'block';
+                document.getElementById('password').value = '';
+                return false;
+            }
+        }
+
+        // Hide error when typing
+        document.getElementById('password').addEventListener('input', function() {
+            document.getElementById('error').style.display = 'none';
+        });
+    </script>
+</body>
+</html>
